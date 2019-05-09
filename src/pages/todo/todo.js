@@ -33,7 +33,7 @@ function TodoList(props){
    );
 }
 
-class Todo{
+class Todo extends React.Component{
 
    state = {
       todoList: []
@@ -41,12 +41,15 @@ class Todo{
 
    //Appel asynchrone avec la bibliothèque Axios
    constructor(){
+      super();
+
       axios.get(URL).then(
          (response)=> {
             console.log(response.data);
-            todoList = response.data;
+            this.setState({todoList: response.data});
          }
       );
+      
    }
   
    render(){
@@ -54,7 +57,7 @@ class Todo{
          <div>
             <h1>Liste des tâches</h1>
             {/* Ici un commentaire */}
-            <TodoList data={todoList}/>
+            <TodoList data={this.state.todoList}/>
          </div>
       );
    }
