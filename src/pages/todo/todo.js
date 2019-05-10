@@ -39,14 +39,13 @@ function TodoList(props){
 class Todo extends React.Component{
 
    state = {
-      todoList: []
+      todoList: [],
+      numberOfPages : 0
    }
 
    currentPage = 1;
 
    numberOfItemsPerPage = 10;
-
-   numberOfPages;
 
    //Appel asynchrone avec la bibliothèque Axios
    constructor(props){
@@ -55,13 +54,17 @@ class Todo extends React.Component{
       axios.get(URL).then(
          (response)=> {
             console.log(response.data);
-            this.setState({todoList: response.data});
-            this.numberOfPages = Math.ceil(response.data.length/this.numberOfItemsPerPage);
+            let state = {
+               todoList : response.data,
+               numberOfPages: Math.ceil(response.data.length/this.numberOfItemsPerPage)
+            }
+            this.setState(state);
+
          }
       );
 
       let values = queryString.parse(this.props.location.search);
-      this.currentPage = values.page;
+      this.currentPage = values.page || 1;
       
     }
   
@@ -71,10 +74,37 @@ class Todo extends React.Component{
             <h1>Liste des tâches</h1>
             {/* Ici un commentaire */}
             <TodoList data={this.state.todoList.slice((this.currentPage-1)* this.numberOfItemsPerPage,this.currentPage*this.numberOfItemsPerPage)}/>
+
+            <Pagination numberOfPages={this.state.numberOfPages}/>
          </div>
       );
    }
    
+}
+
+function Pagination(props){
+   let pages = Array(props.numberOfPages).fill(0);
+
+   const buttons = pages.map(
+      (item, index)=>{
+         let pageNumber = index +1;
+         return (
+            <li key={index} className="page-item">
+               <a className="page-link" href={"/todo?page=" + pageNumber}>
+                  {pageNumber}
+               </a>
+            </li>
+         );
+      }
+   );
+
+   console.log(buttons);
+
+   return (
+      <ul className="pagination">
+         {buttons}
+      </ul>
+   );
 }
 
 export default Todo;
