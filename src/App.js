@@ -8,22 +8,24 @@ import Todo from './pages/todo/todo';
 function App() {
   return (
     <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Accueil</Link>
-          </li>
-          <li>
-            <Link to="/todo">Liste des tâches</Link>
-          </li>
-        </ul>
+      <div className="col-8">
+        <div>
+          <ul className="nav nav-pills nav-fill">
+            <li className="nav-item">
+              <Link to="/" className="nav-link active">Accueil</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/todo">Liste des tâches</Link>
+            </li>
+          </ul>
+        </div>
+
+        <Switch>
+          <Route exact path="/" component={Home}/>
+          <Route exact path="/todo" component={Todo} />
+        </Switch>
+
       </div>
-
-      <Switch>
-        <Route exact path="/" component={Home}/>
-        <Route exact path="/todo" component={Todo} />
-      </Switch>
-
     </Router>
   );
 }

@@ -19,7 +19,7 @@ function TodoList(props){
    console.log(props.data);
 
    return(
-      <table>
+      <table className="table table-bordered table-striped">
          <thead>
             <tr>
                <th>tâche</th>
@@ -49,7 +49,7 @@ class Todo extends React.Component{
             this.setState({todoList: response.data});
          }
       );
-      
+
    }
   
    render(){
