@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import queryString from 'query-string';
 
 const URL = 'http://jsonplaceholder.typicode.com/todos';
 
@@ -41,6 +42,12 @@ class Todo extends React.Component{
       todoList: []
    }
 
+   currentPage = 1;
+
+   numberOfItemsPerPage = 10;
+
+   numberOfPages;
+
    //Appel asynchrone avec la bibliothèque Axios
    constructor(props){
       super(props);
@@ -49,10 +56,13 @@ class Todo extends React.Component{
          (response)=> {
             console.log(response.data);
             this.setState({todoList: response.data});
+            this.numberOfPages = Math.ceil(response.data.length/this.numberOfItemsPerPage);
          }
       );
 
-      console.log(this.props);
+      let values = queryString.parse(this.props.location.search);
+      this.currentPage = values.page;
+      
     }
   
    render(){
@@ -60,7 +70,7 @@ class Todo extends React.Component{
          <div>
             <h1>Liste des tâches</h1>
             {/* Ici un commentaire */}
-            <TodoList data={this.state.todoList.slice(0,10)}/>
+            <TodoList data={this.state.todoList.slice((this.currentPage-1)* this.numberOfItemsPerPage,this.currentPage*this.numberOfItemsPerPage)}/>
          </div>
       );
    }
