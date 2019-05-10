@@ -75,7 +75,9 @@ class Todo extends React.Component{
             {/* Ici un commentaire */}
             <TodoList data={this.state.todoList.slice((this.currentPage-1)* this.numberOfItemsPerPage,this.currentPage*this.numberOfItemsPerPage)}/>
 
-            <Pagination numberOfPages={this.state.numberOfPages}/>
+            <Pagination 
+               numberOfPages={this.state.numberOfPages}
+               currentPage={this.currentPage}/>
          </div>
       );
    }
@@ -88,8 +90,13 @@ function Pagination(props){
    const buttons = pages.map(
       (item, index)=>{
          let pageNumber = index +1;
+
+         let pageClasses = "page-item ";
+         if(props.currentPage == pageNumber){
+            pageClasses += "active";
+         }
          return (
-            <li key={index} className="page-item">
+            <li key={index} className={pageClasses}>
                <a className="page-link" href={"/todo?page=" + pageNumber}>
                   {pageNumber}
                </a>
@@ -98,11 +105,35 @@ function Pagination(props){
       }
    );
 
+   const nextLink = "/todo?page=" + ( props.currentPage==props.numberOfPages?props.currentPage:parseInt(props.currentPage)+1);
+
+   const nextButton = (
+      <li className="page-item">
+         <a className="page-link"
+         href={nextLink}
+         >suivant</a>
+      </li>
+   );
+
+   const prevLink = "/todo?page=" +
+   (props.currentPage ==1?1: props.currentPage-1)
+   const prevButton = (
+      <li className="page-item">
+         <a className="page-link"
+         href={prevLink}
+         >
+            Précédent
+         </a>
+      </li>
+   );
+
    console.log(buttons);
 
    return (
-      <ul className="pagination">
+      <ul className="pagination pagination-sm flex-sm-wrap">
+         {prevButton}
          {buttons}
+         {nextButton}
       </ul>
    );
 }
