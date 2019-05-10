@@ -8,7 +8,8 @@ function TodoList(props){
    const tableRows = props.data.map(
       (task)=>{
          return(
-            <tr>
+            <tr key={task.id}>
+               <td>{task.id}</td>
                <td>{task.title}</td>
                <td>{task.completed? 'OUI': 'NON'}</td>
             </tr>
@@ -22,6 +23,7 @@ function TodoList(props){
       <table className="table table-bordered table-striped">
          <thead>
             <tr>
+               <th>id</th>
                <th>tâche</th>
                <th>Fait</th>
             </tr>
@@ -40,8 +42,8 @@ class Todo extends React.Component{
    }
 
    //Appel asynchrone avec la bibliothèque Axios
-   constructor(){
-      super();
+   constructor(props){
+      super(props);
 
       axios.get(URL).then(
          (response)=> {
@@ -50,14 +52,15 @@ class Todo extends React.Component{
          }
       );
 
-   }
+      console.log(this.props);
+    }
   
    render(){
       return (
          <div>
             <h1>Liste des tâches</h1>
             {/* Ici un commentaire */}
-            <TodoList data={this.state.todoList}/>
+            <TodoList data={this.state.todoList.slice(0,10)}/>
          </div>
       );
    }
